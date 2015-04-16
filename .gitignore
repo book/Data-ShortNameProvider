@@ -1,0 +1,7 @@
+.build
+Data-ShortNameProvider-*
+*.tar.gz
+*.bak
+*.swp
+*~
+mess
