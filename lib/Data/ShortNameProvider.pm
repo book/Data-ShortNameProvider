@@ -1,5 +1,91 @@
 package Data::ShortNameProvider;
 
+use Carp;
+
+use Moo;
+use namespace::clean;
+
+# attributes
+
+has style => (
+    is      => 'ro',
+    default => 'Basic',
+);
+
+has max_name_length => (
+    is       => 'ro',
+    required => 1,
+    default  => 32,
+);
+
+has provider => (
+    is       => 'lazy',
+    init_arg => undef,
+    builder  => sub {
+        my ($self) = shift;
+
+        # allow style => '+My::Fully::Qualified::Style'
+        my $style = $self->style;
+        my $class =
+            substr( $style, 0, 1 ) eq '+'
+          ? substr( $style, 1 )
+          : "Data::ShortNameProvider::Style::$style";
+        eval "require $class;" or die $@;
+
+        return $class->new( $self->extra );
+    },
+);
+
+# extra attributes passed to instantiate the delegate
+# any value passed to the constructor will be ignored
+# as it is populated by BUILDARGS from leftover arguments
+has extra => ( is => 'ro' );
+
+sub BUILDARGS {
+    my $extra = Moo::Object::BUILDARGS(@_);
+    my $args;    # expected arguments
+    exists $extra->{$_} and $args->{$_} = delete $extra->{$_}
+      for (qw( style nax_name_length ));
+    $args->{extra} = $extra;    # arguments for the delegated style class
+    return $args;
+}
+
+#
+# methods
+#
+
+sub style_class { ref shift->provider }
+
+#
+# most stuff is delegated to the provider
+#
+
+sub generate_new_name {
+    my ( $self, $name ) = @_;
+    my $short_name = $self->provider->generate_new_name($name);
+
+    # enforce length restrictions
+    if ( length($short_name) > $self->max_name_length ) {
+        croak sprintf
+          "%s (provided by %s is longer than the requested %d character",
+          $short_name, $self->style_class, $self->max_name_length;
+    }
+
+    return $short_name;
+}
+
+for my $method (
+    qw(
+    parse_generated_name
+    is_generated_name
+    timestamp_epoch
+    )
+  )
+{
+    no strict 'refs';
+    *$method = sub { shift->provider->$method(@_) };
+}
+
 1;
 
 __END__
