@@ -34,6 +34,8 @@ diag $np->provider->parsing_regexp;
 is_deeply(
     $np->parse_generated_name($foo),
     {
+        style           => 'Basic',
+        max_name_length => 32,
         prefix          => 'dbit',
         version         => 1,
         timestamp       => '090213',

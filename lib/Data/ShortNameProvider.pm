@@ -77,9 +77,16 @@ sub generate_new_name {
     return $short_name;
 }
 
+sub parse_generated_name {
+    my ( $self, $name ) = @_;
+    my $hash = $self->provider->parse_generated_name($name);
+    $hash->{$_} = $self->$_
+      for (qw( style max_name_length ));
+    return $hash;
+}
+
 for my $method (
     qw(
-    parse_generated_name
     is_generated_name
     timestamp_epoch
     )
