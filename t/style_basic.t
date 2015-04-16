@@ -4,6 +4,24 @@ use Test::More;
 
 use Data::ShortNameProvider;
 
+# style failure cases
+ok( !eval { Data::ShortNameProvider->new( style => 'not_a_style' ) },
+    'Failed to load style class' );
+like(
+    $@,
+    qr{^Can't locate Data/ShortNameProvider/Style/not_a_style\.pm },
+    '... expected error message'
+);
+
+ok( !eval { Data::ShortNameProvider->new( style => '+Test::More' ) },
+    'Bad style class' );
+like(
+    $@,
+    qr/^Test::More does not implement the Data::ShortNameProvider::Role::Style role /,
+    '... expected error message'
+);
+
+# test the same style in different ways
 for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
 
     my $np = Data::ShortNameProvider->new(
