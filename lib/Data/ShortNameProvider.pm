@@ -33,7 +33,7 @@ has provider => (
         eval "require $class;" or croak $@;
 
         croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
-          if !$class->does('Data::ShortNameProvider::Role::Style');
+          if !$class->DOES('Data::ShortNameProvider::Role::Style');
 
         return $class->new( $self->extra );
     },
