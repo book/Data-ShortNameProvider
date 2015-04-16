@@ -106,6 +106,7 @@ __END__
 =for Pod::Coverage::TrustPod
  extra
  BUILDARGS
+ BUILD
 
 =head1 NAME
 
