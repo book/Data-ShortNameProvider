@@ -53,6 +53,9 @@ sub BUILDARGS {
     return $args;
 }
 
+# ensure the provider is built during construction
+sub BUILD { shift->provider }
+
 #
 # methods
 #
