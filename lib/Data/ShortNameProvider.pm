@@ -21,23 +21,24 @@ has max_name_length => (
 has provider => (
     is       => 'lazy',
     init_arg => undef,
-    builder  => sub {
-        my ($self) = shift;
-
-        # allow style => '+My::Fully::Qualified::Style'
-        my $style = $self->style;
-        my $class =
-            substr( $style, 0, 1 ) eq '+'
-          ? substr( $style, 1 )
-          : "Data::ShortNameProvider::Style::$style";
-        eval "require $class;" or croak $@;
-
-        croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
-          if !$class->DOES('Data::ShortNameProvider::Role::Style');
-
-        return $class->new( $self->extra );
-    },
 );
+
+sub _build_provider {
+    my ($self) = shift;
+
+    # allow style => '+My::Fully::Qualified::Style'
+    my $style = $self->style;
+    my $class =
+        substr( $style, 0, 1 ) eq '+'
+      ? substr( $style, 1 )
+      : "Data::ShortNameProvider::Style::$style";
+    eval "require $class;" or croak $@;
+
+    croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
+      if !$class->DOES('Data::ShortNameProvider::Role::Style');
+
+    return $class->new( $self->extra );
+}
 
 # extra attributes passed to instantiate the delegate
 # any value passed to the constructor will be ignored
