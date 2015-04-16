@@ -30,7 +30,10 @@ has provider => (
             substr( $style, 0, 1 ) eq '+'
           ? substr( $style, 1 )
           : "Data::ShortNameProvider::Style::$style";
-        eval "require $class;" or die $@;
+        eval "require $class;" or croak $@;
+
+        croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
+          if !$class->does('Data::ShortNameProvider::Role::Style');
 
         return $class->new( $self->extra );
     },
