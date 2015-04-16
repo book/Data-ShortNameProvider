@@ -15,7 +15,6 @@ has style => (
 has max_name_length => (
     is       => 'ro',
     required => 1,
-    default  => 32,
 );
 
 has provider => (
