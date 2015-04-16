@@ -69,6 +69,8 @@ produce short names.
 
 The default is the return value of C<time()>.
 
+This is a read-write attribute.
+
 =head1 PROVIDED METHODS
 
 Data::ShortNameProvider::Role::Style provides a default implementation
