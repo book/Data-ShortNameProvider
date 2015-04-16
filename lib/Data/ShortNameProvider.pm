@@ -71,7 +71,9 @@ sub generate_new_name {
     my $short_name = $self->provider->generate_new_name($name);
 
     # enforce length restrictions
-    if ( length($short_name) > $self->max_name_length ) {
+    if ( $self->max_name_length
+        && length($short_name) > $self->max_name_length )
+    {
         croak sprintf
           "%s (provided by %s) is longer than the %d bytes limit",
           $short_name, $self->style_class, $self->max_name_length;
@@ -184,6 +186,8 @@ A maximum length constraint on the generated short names.
 
 L</generate_new_name> will die if the "short name" returned by the style
 is longer than C<max_name_length>.
+
+Setting C<max_name_length> to C<0> removes this constraint.
 
 =head2 provider
 
