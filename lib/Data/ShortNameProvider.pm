@@ -46,10 +46,14 @@ has extra => ( is => 'ro' );
 
 sub BUILDARGS {
     my $extra = Moo::Object::BUILDARGS(@_);
-    my $args;    # expected arguments
+
+    # take out the expected arguments
+    my $args;
     exists $extra->{$_} and $args->{$_} = delete $extra->{$_}
       for (qw( style max_name_length ));
-    $args->{extra} = $extra;    # arguments for the delegated style class
+
+    # keep the remaining arguments for the provider constructor
+    $args->{extra} = $extra;
     return $args;
 }
 
