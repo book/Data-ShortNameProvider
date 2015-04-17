@@ -9,6 +9,14 @@ use Data::ShortNameProvider;
 my %args = ( max_name_length => 32 );
 
 # style failure cases
+ok( !eval { Data::ShortNameProvider->new( ) },
+    'Failed to load without a max_name_length' );
+like(
+    $@,
+    qr{^Missing required arguments: max_name_length },
+    '... expected error message'
+);
+
 ok( !eval { Data::ShortNameProvider->new( %args, style => 'not_a_style' ) },
     'Failed to load style class' );
 like(
