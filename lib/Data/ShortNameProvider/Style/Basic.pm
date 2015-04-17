@@ -13,7 +13,7 @@ has version => (
     default => '1',
     isa     => quote_sub( << 'ISA' ),
     my ($v) = @_;
-    die "'$v' is not a integer" if $v !~ /^[1-9][0-9]*$/;
+    die "'$v' is not a integer" if $v !~ /^(?:0|[1-9][0-9]*)$/;
 ISA
 );
 
@@ -37,7 +37,7 @@ has parsing_regexp => (
         my ($self) = @_;
         my $re =
             quotemeta( $self->prefix )
-          . '([1-9][0-9]*)_'
+          . '(0|[1-9][0-9]*)_'
           . strftime( '%y%m%d', gmtime $self->timestamp_epoch ) . '__' . '(.*)';
         return qr/^$re$/;
     },
