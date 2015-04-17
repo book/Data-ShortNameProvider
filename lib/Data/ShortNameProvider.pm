@@ -1,6 +1,7 @@
 package Data::ShortNameProvider;
 
 use Carp;
+use Module::Runtime qw( require_module );
 
 use Moo;
 use namespace::clean;
@@ -31,7 +32,7 @@ sub _build_provider {
         substr( $style, 0, 1 ) eq '+'
       ? substr( $style, 1 )
       : "Data::ShortNameProvider::Style::$style";
-    eval "require $class;" or croak $@;
+    eval { require_module($class) } or croak $@;
 
     croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
       if !$class->DOES('Data::ShortNameProvider::Role::Style');
