@@ -25,7 +25,7 @@ like(
     '... expected error message'
 );
 
-ok( !eval { Data::ShortNameProvider->new( %args, style => '+Test::More' ) },
+ok( !eval { Data::ShortNameProvider->new( %args, style => 'Test::More' ) },
     'Bad style class' );
 like(
     $@,
@@ -34,7 +34,7 @@ like(
 );
 
 # test the same style in different ways
-for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
+for my $style (qw( Basic Data::ShortNameProvider::Style::Basic )) {
 
     for my $limit ( 0 .. 1 ) {
         my $v  = int rand 20;
@@ -69,8 +69,7 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
         # type checking
         isa_ok( $np,           'Data::ShortNameProvider' );
         isa_ok( $np->provider, 'Data::ShortNameProvider::Style::Basic' );
-        is( $np->style_class, 'Data::ShortNameProvider::Style::Basic',
-            'style_class' );
+        is( $np->style, 'Data::ShortNameProvider::Style::Basic', 'style' );
 
         # delegated stuff
         is( $np->timestamp_epoch,           $t, 'timestamp_epoch (main)' );
@@ -100,7 +99,7 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
             },
             "parsed '$sn' (style)"
         );
-        is( $np->style_class->new($hash)->generate_name('bar'),
+        is( $np->style->new($hash)->generate_name('bar'),
             "$p${v}_${ts}__bar", "generate a short name for 'bar' (style)" );
 
         # via the main class delegation
@@ -109,7 +108,7 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
         is_deeply(
             $hash,
             {
-                style           => $style,
+                style           => 'Data::ShortNameProvider::Style::Basic',
                 max_name_length => $l,
                 prefix          => $p,
                 version         => $v,

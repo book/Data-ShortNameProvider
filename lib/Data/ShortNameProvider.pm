@@ -26,13 +26,8 @@ has provider => (
 
 sub _build_provider {
     my ($self) = shift;
+    my $class = $self->style;
 
-    # allow style => '+My::Fully::Qualified::Style'
-    my $style = $self->style;
-    my $class =
-        substr( $style, 0, 1 ) eq '+'
-      ? substr( $style, 1 )
-      : "Data::ShortNameProvider::Style::$style";
     require_module($class);
 
     croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
@@ -54,6 +49,10 @@ sub BUILDARGS {
     exists $extra->{$_} and $args->{$_} = delete $extra->{$_}
       for (qw( style max_name_length ));
 
+    # allow short style names
+    $args->{style} = "Data::ShortNameProvider::Style::$args->{style}"
+      if exists $args->{style} && $args->{style} !~ /::/;
+
     # keep the remaining arguments for the provider constructor
     $args->{extra} = $extra;
     return $args;
@@ -65,8 +64,6 @@ sub BUILD { shift->provider }
 #
 # methods
 #
-
-sub style_class { ref shift->provider }
 
 #
 # most stuff is delegated to the provider
@@ -82,7 +79,7 @@ sub generate_name {
     {
         croak sprintf
           "%s (provided by %s) is longer than the %d characters limit",
-          $short_name, $self->style_class, $self->max_name_length;
+          $short_name, $self->style, $self->max_name_length;
     }
 
     return $short_name;
@@ -166,15 +163,13 @@ timestamp and other components.
 
 =head2 style
 
-The style of the actual short name provider.
+The fully-qualified name of the style class that actually generates the
+short names.
 
-If prefixed with a C<+> sign, it's a fully-qualified class name,
-otherwise, it will be prefixed with C<Data::ShortNameProvider::Style::>
-to produce the fully-qualified style class name.
-
-=head2 style_class
-
-The fully-qualified name of the style class.
+If the constructor argument does not contain the C<::> package separator,
+the style name is considered to be a short-cut and will be prefixed with
+C<Data::ShortNameProvider::Style::> to produce the fully-qualified style
+class name.
 
 =head2 max_name_length
 
@@ -187,7 +182,7 @@ Setting C<max_name_length> to C<0> removes this constraint.
 
 =head2 provider
 
-The instance of L</style_class> to which most of the actual work is
+The instance of L</style> to which most of the actual work is
 delegated.
 
 =head1 METHODS
