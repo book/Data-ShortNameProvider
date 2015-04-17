@@ -196,7 +196,8 @@ delegated.
 
     my $short_name = $dsnp->generate_new_name($name);
 
-Delegated to the L</provider> object, but enforces some res
+Delegated to the L</provider> object, but enforces some additional
+restrictions (L</max_name_length>).
 
 =head2 parse_generated_name
 
