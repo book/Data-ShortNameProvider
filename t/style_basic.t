@@ -4,8 +4,10 @@ use Test::More;
 
 use Data::ShortNameProvider;
 
+my %args = ( max_name_length => 32 );
+
 # style failure cases
-ok( !eval { Data::ShortNameProvider->new( style => 'not_a_style' ) },
+ok( !eval { Data::ShortNameProvider->new( %args, style => 'not_a_style' ) },
     'Failed to load style class' );
 like(
     $@,
@@ -13,7 +15,7 @@ like(
     '... expected error message'
 );
 
-ok( !eval { Data::ShortNameProvider->new( style => '+Test::More' ) },
+ok( !eval { Data::ShortNameProvider->new( %args, style => '+Test::More' ) },
     'Bad style class' );
 like(
     $@,
