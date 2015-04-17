@@ -12,7 +12,11 @@ has timestamp_epoch => (
     default => sub { time },
 );
 
-sub is_generated_name { !!shift->parse_generated_name(shift); }
+sub is_generated_name {
+    # uncoverable subroutine
+    # uncoverable statement
+    !!shift->parse_generated_name(shift);
+}
 
 1;
 
