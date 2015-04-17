@@ -33,7 +33,7 @@ sub _build_provider {
         substr( $style, 0, 1 ) eq '+'
       ? substr( $style, 1 )
       : "Data::ShortNameProvider::Style::$style";
-    eval { require_module($class) } or croak $@;
+    require_module($class);
 
     croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
       if !$class->DOES('Data::ShortNameProvider::Role::Style');
