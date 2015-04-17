@@ -55,7 +55,7 @@ sub generate_name {
 
 sub parse_generated_name {
     my ( $self, $short_name ) = @_;
-    return if $short_name !~ $self->parsing_regexp;
+    return undef if $short_name !~ $self->parsing_regexp;
     return {
         prefix          => $self->prefix,
         version         => $1,
