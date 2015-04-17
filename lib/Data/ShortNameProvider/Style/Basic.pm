@@ -49,7 +49,7 @@ sub generate_new_name {
     return
         $self->prefix
       . $self->version . '_'
-      . strftime( '%y%m%d', gmtime( $self->timestamp_epoch ) ) . '__'
+      . $self->timestamp . '__'
       . $name;
 }
 
