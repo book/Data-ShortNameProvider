@@ -7,6 +7,7 @@ use Moo;
 use namespace::clean;
 
 # attributes
+my @attributes = qw( style max_name_length );
 
 has style => (
     is      => 'ro',
@@ -46,7 +47,7 @@ sub BUILDARGS {
 
     # copy all arguments but the Data::ShortName::Provider ones in 'extra'
     $args->{extra} = { %$args };
-    delete $args->{extra}{$_} for (qw( style max_name_length ));
+    delete $args->{extra}{$_} for @attributes;
 
     # allow short style names
     $args->{style} = "Data::ShortNameProvider::Style::$args->{style}"
@@ -86,8 +87,7 @@ sub parse_generated_name {
     my ( $self, $name ) = @_;
     my $hash = $self->provider->parse_generated_name($name);
     return $hash if !$hash;
-    $hash->{$_} = $self->$_
-      for (qw( style max_name_length ));
+    $hash->{$_} = $self->$_ for @attributes;
     return $hash;
 }
 
