@@ -44,7 +44,7 @@ has parsing_regexp => (
     },
 );
 
-sub generate_new_name {
+sub generate_name {
     my ( $self, $name ) = @_;
     return
         $self->prefix
@@ -97,7 +97,7 @@ Directly:
 
 Generate a shortname:
 
-    $short_name = $np->generate_new_name('foo');   # returns "dbit1_140513__foo"
+    $short_name = $np->generate_name('foo');   # returns "dbit1_140513__foo"
 
 =head1 DESCRIPTION
 
@@ -141,7 +141,7 @@ components.
 
 =head1 METHODS
 
-=head2 generate_new_name
+=head2 generate_name
 
     my $short_name = $provider->parse_generated_name( $name );
 

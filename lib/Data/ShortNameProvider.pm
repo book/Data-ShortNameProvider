@@ -72,9 +72,9 @@ sub style_class { ref shift->provider }
 # most stuff is delegated to the provider
 #
 
-sub generate_new_name {
+sub generate_name {
     my ( $self, $name ) = @_;
-    my $short_name = $self->provider->generate_new_name($name);
+    my $short_name = $self->provider->generate_name($name);
 
     # enforce length restrictions
     if ( $self->max_name_length
@@ -126,7 +126,7 @@ Create a name provider:
 
 Generate a shortname:
 
-    $short_name = $np->generate_new_name('foo');   # returns "dbit1_140513__foo"
+    $short_name = $np->generate_name('foo');   # returns "dbit1_140513__foo"
 
 Parse a generated shortname:
 
@@ -180,7 +180,7 @@ The fully-qualified name of the style class.
 
 A maximum length constraint on the generated short names.
 
-L</generate_new_name> will die if the "short name" returned by the style
+L</generate_name> will die if the "short name" returned by the style
 is longer than C<max_name_length>.
 
 Setting C<max_name_length> to C<0> removes this constraint.
@@ -192,9 +192,9 @@ delegated.
 
 =head1 METHODS
 
-=head2 generate_new_name
+=head2 generate_name
 
-    my $short_name = $dsnp->generate_new_name($name);
+    my $short_name = $dsnp->generate_name($name);
 
 Delegated to the L</provider> object, but enforces some additional
 restrictions (L</max_name_length>).
