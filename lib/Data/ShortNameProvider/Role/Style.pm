@@ -8,7 +8,7 @@ requires
   ;
 
 has timestamp_epoch => (
-    is      => 'rw',
+    is      => 'ro',
     default => sub { time },
 );
 
@@ -68,8 +68,6 @@ This is a timestamp in Unix epoch, that may be used by the style to
 produce short names.
 
 The default is the return value of C<time()>.
-
-This is a read-write attribute.
 
 =head1 PROVIDED METHODS
 

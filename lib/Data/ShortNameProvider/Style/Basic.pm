@@ -22,14 +22,12 @@ has prefix => (
 has timestamp => (
     is       => 'lazy',
     init_arg => undef,
-    clearer  => 1,
     builder  => sub { strftime '%y%m%d', gmtime shift->timestamp_epoch; },
 );
 
 has parsing_regexp => (
     is       => 'lazy',
     init_arg => undef,
-    clearer  => 1,
     builder  => sub {
         my ($self) = @_;
         my $re = quotemeta(    # who knows what attributes we have?
@@ -40,17 +38,6 @@ has parsing_regexp => (
         return qr/^$re$/;
     },
 );
-
-around timestamp_epoch => sub {
-    my $orig = shift;
-    my $self = shift;
-
-    # clear stuff that depend on timestamp_epoch
-    $self->clear_timestamp;
-    $self->clear_parsing_regexp;
-
-    $orig->( $self, @_ );
-};
 
 sub generate_new_name {
     my ( $self, $name ) = @_;
@@ -135,8 +122,7 @@ Default: C<1>.
 This is a timestamp in Unix epoch, that may be used by the style to
 produce short names.
 
-This is a read-write attribute,
-provided by L<Data::ShortNameProvider::Role::Style>.
+Provided by L<Data::ShortNameProvider::Role::Style>.
 
 =head2 timestamp
 
