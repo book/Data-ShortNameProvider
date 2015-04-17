@@ -42,19 +42,16 @@ sub _build_provider {
 has extra => ( is => 'ro' );
 
 sub BUILDARGS {
-    my $extra = Moo::Object::BUILDARGS(@_);
+    my $args = Moo::Object::BUILDARGS(@_);
 
-    # take out the expected arguments
-    my $args;
-    exists $extra->{$_} and $args->{$_} = delete $extra->{$_}
-      for (qw( style max_name_length ));
+    # copy all arguments but the Data::ShortName::Provider ones in 'extra'
+    $args->{extra} = { %$args };
+    delete $args->{extra}{$_} for (qw( style max_name_length ));
 
     # allow short style names
     $args->{style} = "Data::ShortNameProvider::Style::$args->{style}"
       if exists $args->{style} && $args->{style} !~ /::/;
 
-    # keep the remaining arguments for the provider constructor
-    $args->{extra} = $extra;
     return $args;
 }
 
