@@ -2,6 +2,7 @@ package Data::ShortNameProvider::Style::Basic;
 
 use POSIX qw( strftime );
 use Sub::Quote qw( quote_sub );
+use Time::Local qw( timegm );
 
 use Moo;
 use namespace::clean;
@@ -35,11 +36,11 @@ has parsing_regexp => (
     init_arg => undef,
     builder  => sub {
         my ($self) = @_;
-        my $re =
-            quotemeta( $self->prefix )
-          . '(0|[1-9][0-9]*)_'
-          . strftime( '%y%m%d', gmtime $self->timestamp_epoch ) . '__' . '(.*)';
-        return qr/^$re$/;
+        my $re = quotemeta( $self->prefix )    # prefix
+          . '(0|[1-9][0-9]*)_'                                       # version
+          . '([0-9][0-9])(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])__'  # timestamp
+          . '(.*)';                                                  # name
+          return qr/^$re$/;
     },
 );
 
@@ -58,9 +59,9 @@ sub parse_generated_name {
     return {
         prefix          => $self->prefix,
         version         => $1,
-        timestamp       => $self->timestamp,
-        timestamp_epoch => $self->timestamp_epoch,
-        name            => $2,
+        timestamp       => "$2$3$4",
+        timestamp_epoch => timegm( 0, 0, 0, $4, $3 - 1, $2 ),
+        name            => $5,
     };
 }
 
