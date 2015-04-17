@@ -65,6 +65,11 @@ sub parse_generated_name {
     };
 }
 
+sub is_generated_name {
+    my ( $self, $short_name ) = @_;
+    return scalar $short_name =~ $self->parsing_regexp;
+}
+
 1;
 
 __END__
