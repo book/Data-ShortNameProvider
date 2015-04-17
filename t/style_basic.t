@@ -27,9 +27,10 @@ like(
 for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
 
     my $v = int rand 20;
+    my $l = 20 + int rand 20;
     %args = (
         style           => $style,
-        max_name_length => 32,            # default
+        max_name_length => $l,
         timestamp_epoch => 1234567890,    # Fri Feb 13 23:31:30 2009
 
         # Basic-specific arguments
@@ -91,7 +92,7 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
         $hash,
         {
             style           => $style,
-            max_name_length => 32,
+            max_name_length => $l,
             prefix          => 'dbit',
             version         => $v,
             timestamp       => '090213',
@@ -107,11 +108,11 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
     );
 
     # error case
-    ok( !eval { $np->generate_new_name('this_is_way_too_long') },
-        'name too long' );
+    my $name = join '', map chr( 65 + rand 26 ), 1 .. 40;
+    ok( !eval { $np->generate_new_name($name) }, 'name too long' );
     like(
         $@,
-        qr/^dbit${v}_090213__this_is_way_too_long \(provided by Data::ShortNameProvider::Style::Basic\) is longer than the 32 characters limit /,
+        qr/^dbit${v}_090213__$name \(provided by Data::ShortNameProvider::Style::Basic\) is longer than the $l characters limit /,
         '... expected error message'
     );
 
