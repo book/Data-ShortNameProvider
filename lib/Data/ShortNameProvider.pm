@@ -80,7 +80,7 @@ sub generate_new_name {
         && length($short_name) > $self->max_name_length )
     {
         croak sprintf
-          "%s (provided by %s) is longer than the %d bytes limit",
+          "%s (provided by %s) is longer than the %d characters limit",
           $short_name, $self->style_class, $self->max_name_length;
     }
 

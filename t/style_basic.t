@@ -99,7 +99,7 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
         'name too long' );
     like(
         $@,
-        qr/^dbit1_090213__this_is_way_too_long \(provided by Data::ShortNameProvider::Style::Basic\) is longer than the 32 bytes limit /,
+        qr/^dbit1_090213__this_is_way_too_long \(provided by Data::ShortNameProvider::Style::Basic\) is longer than the 32 characters limit /,
         '... expected error message'
     );
 
