@@ -26,7 +26,7 @@ like(
 # test the same style in different ways
 for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
 
-    my $np = Data::ShortNameProvider->new(
+    %args = (
         style           => $style,
         max_name_length => 32,            # default
         timestamp_epoch => 1234567890,    # Fri Feb 13 23:31:30 2009
@@ -35,6 +35,18 @@ for my $style (qw( Basic +Data::ShortNameProvider::Style::Basic )) {
         prefix  => 'dbit',
         version => 1,
     );
+
+    # failing tests
+    ok( !eval { Data::ShortNameProvider->new( %args, version => 'a' ) },
+        'non-numeric version' );
+    like(
+        $@,
+        qr/^isa check for "version" failed: 'a' is not a integer /,
+        '... expected error message'
+    );
+
+    # passing tests
+    my $np = Data::ShortNameProvider->new( %args );
 
     # type checking
     isa_ok( $np,           'Data::ShortNameProvider' );

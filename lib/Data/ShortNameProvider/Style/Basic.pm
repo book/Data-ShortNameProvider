@@ -1,6 +1,7 @@
 package Data::ShortNameProvider::Style::Basic;
 
 use POSIX qw( strftime );
+use Sub::Quote qw( quote_sub );
 
 use Moo;
 use namespace::clean;
@@ -10,6 +11,10 @@ with 'Data::ShortNameProvider::Role::Style';
 has version => (
     is      => 'ro',
     default => '1',
+    isa     => quote_sub( << 'ISA' ),
+    my ($v) = @_;
+    die "'$v' is not a integer" if $v !~ /^[1-9][0-9]*$/;
+ISA
 );
 
 has prefix => (
