@@ -1,0 +1,5 @@
+Revision history for Data-ShortNameProvider
+
+{{$NEXT}}
+    - first version, based on discussions with dbi-dev@ and TIMB
+    - 100% test coverage
