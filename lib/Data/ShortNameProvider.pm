@@ -21,6 +21,7 @@ has max_name_length => (
 has provider => (
     is       => 'lazy',
     init_arg => undef,
+    handles  => [ 'is_generated_name', 'timestamp_epoch' ],
 );
 
 sub _build_provider {
@@ -94,17 +95,6 @@ sub parse_generated_name {
     $hash->{$_} = $self->$_
       for (qw( style max_name_length ));
     return $hash;
-}
-
-for my $method (
-    qw(
-    is_generated_name
-    timestamp_epoch
-    )
-  )
-{
-    no strict 'refs';
-    *$method = sub { shift->provider->$method(@_) };
 }
 
 1;
