@@ -95,12 +95,24 @@ Generate a "short name" for the C<$name> parameter.
     my $hash = $provider->parse_generated_name( $short_name );
 
 Return the components of the name as a hash.
+This method will parse names that might have been generated with a different
+instance.
 
 C<$hash> should at least contain the C<name> and C<timestamp_epoch> keys.
 Everything else depends on the style itself, but one should always be
-able to make a copy of the provider by doing:
+able to make a copy of the original provider by passing C<$hash> to the
+constructor.
 
-    my $clone = $provider->new($hash);
+    my $prev = My::DSNP::Style->new(%args);
+    my $sn   = $prev->generate_new_name($name);
+
+    my $cur  = My::DSNP::Style->new(%other_args);
+    my $hash = $cur->parse_generated_name($sn);
+
+    my $next = My::DSNP::Style->new($hash);
+
+    # always true
+    $sn eq $next->generate_new_name($name);
 
 =head1 SEE ALSO
 
