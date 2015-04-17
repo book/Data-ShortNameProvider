@@ -235,9 +235,10 @@ L<http://www.nntp.perl.org/group/perl.dbi.dev/2014/04/msg7792.html>
 Tim's proposal for a short name provider:
 L<http://www.nntp.perl.org/group/perl.dbi.dev/2014/05/msg7815.html>
 
-The first implementaion of the module was written during the first day of
-the Perl QA Hackathon 2015 in Berlin (with Tim Bunce providing feedback
-on IRC). Many thanks to TINITA for organizing this event!
+The first implementaion of the module was written during the first two
+days of the Perl QA Hackathon 2015 in Berlin (with Tim Bunce providing
+extensive feedback on IRC). Many thanks to TINITA for organizing this
+event!
 
 =head1 AUTHOR
 
