@@ -35,11 +35,10 @@ has parsing_regexp => (
     init_arg => undef,
     builder  => sub {
         my ($self) = @_;
-        my $re = quotemeta(    # who knows what attributes we have?
-            $self->prefix
-              . $self->version . '_'
-              . strftime( '%y%m%d', gmtime $self->timestamp_epoch ) . '__'
-        ) . '(.*)';
+        my $re =
+            quotemeta( $self->prefix )
+          . '([1-9][0-9]*)_'
+          . strftime( '%y%m%d', gmtime $self->timestamp_epoch ) . '__' . '(.*)';
         return qr/^$re$/;
     },
 );
@@ -58,10 +57,10 @@ sub parse_generated_name {
     return if $short_name !~ $self->parsing_regexp;
     return {
         prefix          => $self->prefix,
-        version         => $self->version,
+        version         => $1,
         timestamp       => $self->timestamp,
         timestamp_epoch => $self->timestamp_epoch,
-        name            => $1,
+        name            => $2,
     };
 }
 
