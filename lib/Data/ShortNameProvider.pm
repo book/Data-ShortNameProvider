@@ -48,7 +48,7 @@ sub BUILDARGS {
     my $extra = Moo::Object::BUILDARGS(@_);
     my $args;    # expected arguments
     exists $extra->{$_} and $args->{$_} = delete $extra->{$_}
-      for (qw( style nax_name_length ));
+      for (qw( style max_name_length ));
     $args->{extra} = $extra;    # arguments for the delegated style class
     return $args;
 }
