@@ -90,6 +90,7 @@ sub generate_new_name {
 sub parse_generated_name {
     my ( $self, $name ) = @_;
     my $hash = $self->provider->parse_generated_name($name);
+    return $hash if !$hash;
     $hash->{$_} = $self->$_
       for (qw( style max_name_length ));
     return $hash;
