@@ -32,7 +32,7 @@ sub _build_provider {
     require_module($class);
 
     croak "$class does not implement the Data::ShortNameProvider::Role::Style role"
-      if !$class->DOES('Data::ShortNameProvider::Role::Style');
+      if !eval { $class->does('Data::ShortNameProvider::Role::Style') };
 
     return $class->new( $self->extra );
 }
